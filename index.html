@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/Akinz/Downloads/AkinzDesign_App.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akinz Design — Studio Manager</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050D2E;--bg2:#0A1540;--bg3:#0F1D50;
+  --accent:#C0392B;--accent2:#E74C3C;
+  --text:#FFFFFF;--muted:#8A9CC8;
+  --border:rgba(138,156,200,0.15);--border2:rgba(192,57,43,0.4);
+  --success:#27AE60;--warn:#F39C12;--info:#2980B9;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:14px}
+/* LAYOUT */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:210px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-dot{width:10px;height:10px;background:var(--accent);border-radius:50%;flex-shrink:0}
+.logo-text{font-size:13px;font-weight:600;letter-spacing:1.5px}
+.sidebar-nav{padding:12px 8px;flex:1;overflow-y:auto}
+.nav-section{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:10px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--muted);font-size:13px;border:none;background:none;width:100%;text-align:left;transition:all .15s}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+.nav-item.active{background:rgba(192,57,43,0.12);color:#FF6B5B}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;border-radius:10px;padding:1px 6px}
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border)}
+.user-box{display:flex;align-items:center;gap:9px;padding:8px;border-radius:8px;background:var(--bg3);font-size:12px}
+.user-avatar{width:28px;height:28px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:54px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.page-heading{font-size:16px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.btn{border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;font-weight:500;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2)}
+.btn-ghost{background:none;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:rgba(138,156,200,0.4)}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-icon{padding:7px;border-radius:7px;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer}
+.btn-icon:hover{color:var(--text);border-color:rgba(138,156,200,0.4)}
+.content{flex:1;overflow-y:auto;padding:24px}
+/* PAGE */
+.page{display:none}
+.page.active{display:block}
+/* CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+.stat-value{font-size:24px;font-weight:600}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.up{color:var(--success)}.warn{color:var(--warn)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card-title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px;text-transform:uppercase;letter-spacing:.5px}
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{color:var(--muted);font-weight:500;text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid rgba(138,156,200,0.07);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.025)}
+.badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap}
+.b-paid{background:rgba(39,174,96,0.15);color:#2ECC71}
+.b-pending{background:rgba(243,156,18,0.15);color:#F39C12}
+.b-late{background:rgba(192,57,43,0.15);color:#E74C3C}
+.b-progress{background:rgba(41,128,185,0.15);color:#3498DB}
+.b-done{background:rgba(39,174,96,0.15);color:#2ECC71}
+.b-quote{background:rgba(155,89,182,0.15);color:#9B59B6}
+.b-accepted{background:rgba(41,128,185,0.15);color:#3498DB}
+.b-refused{background:rgba(192,57,43,0.15);color:#E74C3C}
+/* ALERT */
+.alert{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:9px;font-size:13px;margin-bottom:16px}
+.alert-warn{background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.3);color:#F39C12}
+.alert-info{background:rgba(41,128,185,0.1);border:1px solid rgba(41,128,185,0.3);color:#5DADE2}
+/* BARS */
+.bars{display:flex;align-items:flex-end;gap:5px;height:90px;margin-top:8px}
+.bar-w{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.bar{border-radius:4px 4px 0 0;width:100%}
+.bar-lbl{font-size:9px;color:var(--muted)}
+/* PROGRESS */
+.progress{height:4px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:4px}
+/* CLIENTS */
+.clients-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.client-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:border-color .15s}
+.client-card:hover{border-color:rgba(192,57,43,0.4)}
+.client-av{width:42px;height:42px;border-radius:10px;background:rgba(192,57,43,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#FF6B5B;margin-bottom:10px}
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:580px;max-width:100%;max-height:90vh;overflow-y:auto;padding:28px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.modal-title{font-size:17px;font-weight:600}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:22px;line-height:1}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+label{font-size:12px;color:var(--muted)}
+input,textarea,select{background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:9px 12px;width:100%;font-family:inherit;outline:none;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+select option{background:var(--bg2)}
+textarea{resize:vertical;min-height:75px}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+.divider{height:1px;background:var(--border);margin:18px 0}
+.info-box{background:rgba(41,128,185,0.08);border:1px solid rgba(41,128,185,0.25);border-radius:8px;padding:11px 13px;font-size:12px;color:#5DADE2;line-height:1.6}
+/* DRIVE VIEW */
+.tree{font-size:13px;font-family:'Consolas',monospace;line-height:2;color:var(--muted)}
+.tree .folder{color:#F39C12}.tree .file{color:var(--accent)}.tree .hl{color:var(--text)}
+/* SETUP */
+.setup-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;gap:20px;padding:40px;text-align:center}
+.setup-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:36px;max-width:480px;width:100%}
+.setup-title{font-size:22px;font-weight:600;margin-bottom:8px}
+.setup-sub{color:var(--muted);font-size:14px;margin-bottom:28px;line-height:1.6}
+/* FACTURE PREVIEW */
+.invoice-preview{background:#fff;color:#111;border-radius:10px;padding:36px;font-size:13px;line-height:1.6;max-width:680px}
+.inv-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px}
+.inv-title{font-size:26px;font-weight:700;color:#C0392B;letter-spacing:1px}
+.inv-num{font-size:13px;color:#666;margin-top:4px}
+.inv-table{width:100%;border-collapse:collapse;margin:20px 0}
+.inv-table th{background:#f5f5f5;padding:9px 12px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.inv-table td{padding:9px 12px;border-bottom:1px solid #eee}
+.inv-total{text-align:right;margin-top:10px}
+.inv-total-line{display:flex;justify-content:flex-end;gap:40px;font-size:14px;padding:4px 0}
+.inv-total-line.big{font-weight:700;font-size:16px;border-top:2px solid #C0392B;padding-top:10px;margin-top:6px}
+.inv-footer{margin-top:30px;padding-top:20px;border-top:1px solid #eee;font-size:11px;color:#888;text-align:center}
+/* NOTIFICATION */
+.notif{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:14px 18px;font-size:13px;z-index:999;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px}
+.notif.show{transform:translateY(0);opacity:1}
+.notif-icon{font-size:18px}
+/* RESPONSIVE ACTIONS */
+.action-row{display:flex;gap:6px;align-items:center}
+.lnk{color:#5DADE2;cursor:pointer;font-size:12px}
+.lnk:hover{text-decoration:underline}
+/* GOOGLE CONNECT */
+#google-btn{background:#fff;color:#333;border:none;border-radius:8px;padding:10px 20px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:500;width:100%;justify-content:center;margin-bottom:12px}
+#google-btn:hover{background:#f0f0f0}
+.step-badge{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- SETUP / LOGIN SCREEN -->
+<div id="setup-screen" class="setup-screen">
+  <div style="margin-bottom:8px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px">
+      <div style="width:12px;height:12px;background:#C0392B;border-radius:50%"></div>
+      <span style="font-size:14px;font-weight:600;letter-spacing:2px">AKINZ DESIGN</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-align:center;letter-spacing:1px">STUDIO MANAGER</div>
+  </div>
+  <div class="setup-card">
+    <div class="setup-title">Bienvenue 👋</div>
+    <div class="setup-sub">Connecte-toi avec Google pour accéder à ton Drive et gérer tes commandes, factures et clients.</div>
+    <button id="google-btn" onclick="startGoogleAuth()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
+      Se connecter avec Google
+    </button>
+    <div style="font-size:11px;color:var(--muted);text-align:center">
+      L'app accède uniquement à ton Google Drive.<br>Tes données restent chez toi.
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Première utilisation ? Configure ton Client ID Google :</div>
+    <div class="fg" style="margin-bottom:12px">
+      <label>Client ID Google OAuth</label>
+      <input type="text" id="client-id-input" placeholder="123456789-xxx.apps.googleusercontent.com">
+    </div>
+    <div class="fg" style="margin-bottom:14px">
+      <label>Numéro de ta dernière facture</label>
+      <input type="number" id="last-invoice-input" placeholder="40" value="40">
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="saveConfig()">Enregistrer la configuration</button>
+  </div>
+</div>
+
+<!-- APP PRINCIPALE -->
+<div id="app" class="app" style="display:none">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-dot"></div>
+      <div class="logo-text">AKINZ DESIGN</div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section">Général</div>
+      <button class="nav-item active" onclick="nav(&#39;dashboard&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" onclick="nav(&#39;commandes&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-4 0v2M8 7V5a2 2 0 0 0-4 0v2"></path></svg>
+        Commandes
+        <span class="nav-badge" id="badge-commandes">0</span>
+      </button>
+      <div class="nav-section">Finance</div>
+      <button class="nav-item" onclick="nav(&#39;factures&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14,2 14,8 20,8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        Factures
+        <span class="nav-badge" id="badge-factures">0</span>
+      </button>
+      <button class="nav-item" onclick="nav(&#39;devis&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14,2 14,8 20,8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="12" y1="17" x2="8" y2="17"></line></svg>
+        Devis
+      </button>
+      <div class="nav-section">Clients</div>
+      <button class="nav-item" onclick="nav(&#39;clients&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Clients
+      </button>
+      <button class="nav-item" onclick="nav(&#39;drive&#39;,this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        Drive
+      </button>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="user-box">
+        <div class="user-avatar" id="user-av">A</div>
+        <div>
+          <div style="font-size:12px;font-weight:600" id="user-name">Akinz</div>
+          <div style="font-size:10px;color:var(--muted)" id="user-email">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="page-heading" id="page-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openModal(&#39;commande&#39;)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Nouvelle commande
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div id="alert-zone"></div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">CA Année en cours</div>
+            <div class="stat-value" id="ca-annee">0 €</div>
+            <div class="stat-sub" id="ca-annee-sub">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">CA Mois en cours</div>
+            <div class="stat-value" id="ca-mois">0 €</div>
+            <div class="stat-sub" id="ca-mois-sub">Mois en cours</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Encaissé</div>
+            <div class="stat-value" id="ca-encaisse">0 €</div>
+            <div class="stat-sub warn" id="ca-attente">0 € en attente</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Plafond Auto-Entrepreneur</div>
+            <div class="stat-value">77 700 €</div>
+            <div class="stat-sub" id="plafond-pct">0% utilisé</div>
+            <div class="progress"><div class="progress-fill" id="plafond-bar" style="background:var(--success);width:0%"></div></div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path></svg>
+              CA par mois
+            </div>
+            <div class="bars" id="chart-bars"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12,6 12,12 16,14"></polyline></svg>
+              Commandes récentes
+            </div>
+            <table><tbody id="recent-orders"></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMANDES -->
+      <div class="page" id="page-commandes">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Projet</th><th>Client</th><th>Date</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="table-commandes"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FACTURES -->
+      <div class="page" id="page-factures">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>N° Facture</th><th>Client</th><th>Projet</th><th>Date</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="table-factures"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DEVIS -->
+      <div class="page" id="page-devis">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+          <button class="btn btn-primary btn-sm" onclick="openModal(&#39;devis&#39;)">+ Nouveau devis</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>N° Devis</th><th>Client</th><th>Projet</th><th>Date</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="table-devis"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CLIENTS -->
+      <div class="page" id="page-clients">
+        <div class="clients-grid" id="clients-grid"></div>
+      </div>
+
+      <!-- DRIVE -->
+      <div class="page" id="page-drive">
+        <div class="card">
+          <div class="card-title">Arborescence Google Drive — APP AKINZ DESIGN</div>
+          <div class="tree" id="drive-tree">
+            <div>Chargement de l'arborescence...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOUVELLE COMMANDE / DEVIS -->
+<div class="overlay" id="modal-commande">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-commande-title">Nouvelle commande</div>
+      <button class="modal-close" onclick="closeModal(&#39;commande&#39;)">×</button>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="edit-id" value="">
+      <div class="fg">
+        <label>Nom du client *</label>
+        <input type="text" id="f-client" placeholder="Ex: Groove Events" list="clients-list">
+        <datalist id="clients-list"></datalist>
+      </div>
+      <div class="fg">
+        <label>Type de client</label>
+        <select id="f-client-type"><option value="Organisation">Organisation / Entreprise</option><option value="Particulier">Particulier</option></select>
+      </div>
+      <div class="fg full">
+        <label>Nom du projet *</label>
+        <input type="text" id="f-projet" placeholder="Ex: Aftermovie Festival 2026">
+      </div>
+      <div class="fg full">
+        <label>Brief / Description</label>
+        <textarea id="f-brief" placeholder="Décris la demande du client..."></textarea>
+      </div>
+      <div class="fg">
+        <label>Type de prestation</label>
+        <select id="f-prestation">
+          <option>Motion Design</option>
+          <option>Montage vidéo</option>
+          <option>Identité visuelle</option>
+          <option>Direction artistique</option>
+          <option>Graphisme</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Montant (€)</label>
+        <input type="number" id="f-montant" placeholder="0" min="0">
+      </div>
+      <div class="fg">
+        <label>Date</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="fg">
+        <label>Statut</label>
+        <select id="f-statut">
+          <option value="En attente">En attente</option>
+          <option value="En cours">En cours</option>
+          <option value="Livré">Livré</option>
+          <option value="Facturé">Facturé</option>
+          <option value="Payé">Payé</option>
+        </select>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:14px">
+      📁 Dossiers créés automatiquement sur Drive :<br>
+      <strong>APP AKINZ DESIGN / CLIENTS / [Client] / [Projet] /</strong> → Facture · Création · Export
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal(&#39;commande&#39;)">Annuler</button>
+      <button class="btn btn-primary" onclick="saveCommande()">Créer la commande →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FACTURE -->
+<div class="overlay" id="modal-facture">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-facture-title">Nouvelle facture</div>
+      <button class="modal-close" onclick="closeModal(&#39;facture&#39;)">×</button>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="ff-edit-id" value="">
+      <div class="fg">
+        <label>Client *</label>
+        <input type="text" id="ff-client" placeholder="Nom du client">
+      </div>
+      <div class="fg">
+        <label>Projet *</label>
+        <input type="text" id="ff-projet" placeholder="Nom du projet">
+      </div>
+      <div class="fg">
+        <label>Date de facture</label>
+        <input type="date" id="ff-date">
+      </div>
+      <div class="fg">
+        <label>Date d'échéance</label>
+        <input type="date" id="ff-echeance">
+      </div>
+      <div class="fg full">
+        <label>Éléments livrés / Description</label>
+        <textarea id="ff-desc" placeholder="Ex: Création motion design logo animé, 3 versions..." style="min-height:90px"></textarea>
+      </div>
+      <div class="fg">
+        <label>Montant HT (€)</label>
+        <input type="number" id="ff-montant" placeholder="0" oninput="updateInvTotal()">
+      </div>
+      <div class="fg">
+        <label>Statut paiement</label>
+        <select id="ff-statut">
+          <option value="En attente">En attente</option>
+          <option value="Payée">Payée</option>
+          <option value="En retard">En retard</option>
+        </select>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:14px" id="ff-num-preview">
+      N° de facture : <strong id="ff-num-display">—</strong> · Auto-entrepreneur, pas de TVA applicable
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal(&#39;facture&#39;)">Annuler</button>
+      <button class="btn btn-primary" onclick="saveFacture()">Générer la facture →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL APERÇU FACTURE PDF -->
+<div class="overlay" id="modal-preview">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-header">
+      <div class="modal-title">Aperçu facture</div>
+      <button class="modal-close" onclick="closeModal(&#39;preview&#39;)">×</button>
+    </div>
+    <div id="invoice-preview-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal(&#39;preview&#39;)">Fermer</button>
+      <button class="btn btn-primary" onclick="downloadInvoicePDF()">⬇ Télécharger PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">
+  <span class="notif-icon" id="notif-icon">✅</span>
+  <span id="notif-text">Action réalisée</span>
+</div>
+
+<script>
+// ===== CONFIG =====
+const SCOPES = 'https://www.googleapis.com/auth/drive';
+const MONTHS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+const MONTHS_FULL = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+let CLIENT_ID = localStorage.getItem('akinz_client_id') || '';
+let lastInvoiceNum = parseInt(localStorage.getItem('akinz_last_inv') || '40');
+let tokenClient = null;
+let accessToken = null;
+let rootFolderId = null;
+let clientsFolderId = null;
+let DB = { commandes:[], factures:[], devis:[], clients:[] };
+let dbFileId = null;
+
+// ===== INIT =====
+window.onload = () => {
+  if (CLIENT_ID) document.getElementById('client-id-input').value = CLIENT_ID;
+  document.getElementById('last-invoice-input').value = lastInvoiceNum;
+  setTodayDates();
+  const tok = sessionStorage.getItem('akinz_token');
+  if (tok && CLIENT_ID) { accessToken = tok; initApp(); }
+};
+
+function setTodayDates() {
+  const today = new Date().toISOString().split('T')[0];
+  const d = new Date(); d.setDate(d.getDate()+30);
+  const due = d.toISOString().split('T')[0];
+  document.getElementById('f-date').value = today;
+  document.getElementById('ff-date').value = today;
+  document.getElementById('ff-echeance').value = due;
+}
+
+function saveConfig() {
+  const id = document.getElementById('client-id-input').value.trim();
+  const num = parseInt(document.getElementById('last-invoice-input').value) || 40;
+  if (!id) { showNotif('⚠️','Entre ton Client ID Google'); return; }
+  localStorage.setItem('akinz_client_id', id);
+  localStorage.setItem('akinz_last_inv', num);
+  CLIENT_ID = id; lastInvoiceNum = num;
+  showNotif('✅','Configuration enregistrée !');
+}
+
+function startGoogleAuth() {
+  if (!CLIENT_ID) { showNotif('⚠️','Configure ton Client ID d\'abord'); return; }
+  const script = document.createElement('script');
+  script.src = 'https://accounts.google.com/gsi/client';
+  script.onload = () => {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: (resp) => {
+        if (resp.error) { showNotif('❌','Erreur connexion : '+resp.error); return; }
+        accessToken = resp.access_token;
+        sessionStorage.setItem('akinz_token', accessToken);
+        fetchUserInfo().then(initApp);
+      }
+    });
+    tokenClient.requestAccessToken();
+  };
+  document.head.appendChild(script);
+}
+
+async function fetchUserInfo() {
+  try {
+    const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers:{Authorization:'Bearer '+accessToken} });
+    const u = await r.json();
+    document.getElementById('user-name').textContent = u.given_name || 'Akinz';
+    document.getElementById('user-email').textContent = u.email || '';
+    document.getElementById('user-av').textContent = (u.given_name||'A')[0].toUpperCase();
+  } catch(e){}
+}
+
+async function initApp() {
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  await setupDriveFolders();
+  await loadDB();
+  renderAll();
+}
+
+// ===== GOOGLE DRIVE =====
+async function driveReq(method, path, body, params) {
+  let url = 'https://www.googleapis.com/'+path;
+  if (params) url += '?'+new URLSearchParams(params);
+  const opts = { method, headers:{ Authorization:'Bearer '+accessToken, 'Content-Type':'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(url, opts);
+  return r.ok ? r.json() : null;
+}
+
+async function findOrCreateFolder(name, parentId) {
+  const q = `name='${name}' and mimeType='application/vnd.google-apps.folder' and trashed=false${parentId ? ` and '${parentId}' in parents` : ''}`;
+  const res = await driveReq('GET','drive/v3/files',null,{q,fields:'files(id,name)'});
+  if (res && res.files && res.files.length) return res.files[0].id;
+  const body = { name, mimeType:'application/vnd.google-apps.folder' };
+  if (parentId) body.parents = [parentId];
+  const created = await driveReq('POST','drive/v3/files',body);
+  return created ? created.id : null;
+}
+
+async function setupDriveFolders() {
+  showNotif('📁','Configuration du Drive...');
+  rootFolderId = await findOrCreateFolder('APP AKINZ DESIGN', null);
+  clientsFolderId = await findOrCreateFolder('CLIENTS', rootFolderId);
+  await findOrCreateFolder('FACTURES', rootFolderId);
+  await findOrCreateFolder('DEVIS', rootFolderId);
+}
+
+async function createProjectFolders(clientName, projectName) {
+  const clientFolder = await findOrCreateFolder(clientName, clientsFolderId);
+  const projectFolder = await findOrCreateFolder(projectName, clientFolder);
+  await findOrCreateFolder('Facture', projectFolder);
+  await findOrCreateFolder('Création', projectFolder);
+  await findOrCreateFolder('Export', projectFolder);
+  return { clientFolder, projectFolder };
+}
+
+// ===== DB (stored as JSON in Drive) =====
+async function loadDB() {
+  const q = `name='akinz_db.json' and trashed=false and '${rootFolderId}' in parents`;
+  const res = await driveReq('GET','drive/v3/files',null,{q,fields:'files(id,name)'});
+  if (res && res.files && res.files.length) {
+    dbFileId = res.files[0].id;
+    const r = await fetch(`https://www.googleapis.com/drive/v3/files/${dbFileId}?alt=media`, { headers:{Authorization:'Bearer '+accessToken} });
+    if (r.ok) { try { DB = await r.json(); } catch(e){} }
+  }
+}
+
+async function saveDB() {
+  const content = JSON.stringify(DB);
+  const blob = new Blob([content],{type:'application/json'});
+  if (dbFileId) {
+    await fetch(`https://www.googleapis.com/upload/drive/v3/files/${dbFileId}?uploadType=media`, {
+      method:'PATCH', headers:{Authorization:'Bearer '+accessToken,'Content-Type':'application/json'}, body:content
+    });
+  } else {
+    const meta = await driveReq('POST','drive/v3/files',{name:'akinz_db.json',parents:[rootFolderId]});
+    if (meta) {
+      dbFileId = meta.id;
+      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${dbFileId}?uploadType=media`, {
+        method:'PATCH', headers:{Authorization:'Bearer '+accessToken,'Content-Type':'application/json'}, body:content
+      });
+    }
+  }
+}
+
+// ===== RENDER =====
+function renderAll() {
+  renderDashboard();
+  renderCommandes();
+  renderFactures();
+  renderDevis();
+  renderClients();
+  renderDrive();
+  updateBadges();
+  updateClientsList();
+}
+
+function renderDashboard() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const factures = DB.factures || [];
+  const caAnnee = factures.filter(f=>new Date(f.date).getFullYear()===year).reduce((s,f)=>s+parseFloat(f.montant||0),0);
+  const caMois = factures.filter(f=>{const d=new Date(f.date);return d.getFullYear()===year&&d.getMonth()===month}).reduce((s,f)=>s+parseFloat(f.montant||0),0);
+  const encaisse = factures.filter(f=>f.statut==='Payée').reduce((s,f)=>s+parseFloat(f.montant||0),0);
+  const attente = factures.filter(f=>f.statut!=='Payée').reduce((s,f)=>s+parseFloat(f.montant||0),0);
+  document.getElementById('ca-annee').textContent = caAnnee.toLocaleString('fr-FR')+'  €';
+  document.getElementById('ca-mois').textContent = caMois.toLocaleString('fr-FR')+' €';
+  document.getElementById('ca-encaisse').textContent = encaisse.toLocaleString('fr-FR')+' €';
+  document.getElementById('ca-attente').textContent = attente.toLocaleString('fr-FR')+' € en attente';
+  const pct = Math.min(100, Math.round(caAnnee/77700*100));
+  document.getElementById('plafond-pct').textContent = caAnnee.toLocaleString('fr-FR')+' € utilisés ('+pct+'%)';
+  document.getElementById('plafond-bar').style.width = pct+'%';
+  document.getElementById('plafond-bar').style.background = pct>80?'#E74C3C':pct>60?'#F39C12':'#27AE60';
+
+  // Alerts
+  const az = document.getElementById('alert-zone');
+  az.innerHTML='';
+  const late = factures.filter(f=>f.statut==='En retard').length;
+  const pend = factures.filter(f=>f.statut==='En attente').length;
+  if (late) az.innerHTML += `<div class="alert alert-warn">⚠️ ${late} facture(s) en retard — relance recommandée</div>`;
+  if (pend) az.innerHTML += `<div class="alert alert-info">ℹ️ ${pend} facture(s) en attente de paiement</div>`;
+  if (pct>80) az.innerHTML += `<div class="alert alert-warn">⚠️ Tu approches du plafond auto-entrepreneur (${pct}% atteint)</div>`;
+
+  // Chart
+  const bars = document.getElementById('chart-bars');
+  const monthly = Array(12).fill(0);
+  factures.filter(f=>new Date(f.date).getFullYear()===year).forEach(f=>{monthly[new Date(f.date).getMonth()]+=parseFloat(f.montant||0)});
+  const max = Math.max(...monthly,1);
+  bars.innerHTML = monthly.map((v,i)=>`
+    <div class="bar-w">
+      <div class="bar" style="height:${Math.max(4,Math.round(v/max*85))}px;background:${i===month?'rgba(192,57,43,0.4)':v>0?'#C0392B':'rgba(138,156,200,0.12)'}"></div>
+      <div class="bar-lbl">${MONTHS[i]}</div>
+    </div>`).join('');
+
+  // Recent
+  const recent = [...(DB.commandes||[])].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+  document.getElementById('recent-orders').innerHTML = recent.map(c=>`
+    <tr><td><strong>${c.projet}</strong><br><span style="font-size:11px;color:var(--muted)">${c.client}</span></td>
+    <td>${badgeHTML(c.statut)}</td></tr>`).join('') || '<tr><td colspan="2" style="color:var(--muted);text-align:center;padding:20px">Aucune commande</td></tr>';
+}
+
+function renderCommandes() {
+  const tb = document.getElementById('table-commandes');
+  tb.innerHTML = [...(DB.commandes||[])].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(c=>`
+    <tr>
+      <td><strong>${c.projet}</strong><br><span style="font-size:11px;color:var(--muted)">${c.prestation||''}</span></td>
+      <td>${c.client}</td>
+      <td>${formatDate(c.date)}</td>
+      <td>${parseFloat(c.montant||0).toLocaleString('fr-FR')} €</td>
+      <td>${badgeHTML(c.statut)}</td>
+      <td class="action-row">
+        <button class="btn-icon" title="Modifier" onclick="editCommande('${c.id}')">✏️</button>
+        <button class="btn-icon" title="Créer facture" onclick="factureFromCommande('${c.id}')">🧾</button>
+        <button class="btn-icon" title="Supprimer" onclick="deleteItem('commandes','${c.id}')">🗑️</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:30px">Aucune commande — clique sur "+ Nouvelle commande"</td></tr>';
+}
+
+function renderFactures() {
+  const tb = document.getElementById('table-factures');
+  tb.innerHTML = [...(DB.factures||[])].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(f=>`
+    <tr>
+      <td><strong>${f.numero}</strong></td>
+      <td>${f.client}</td>
+      <td>${f.projet}</td>
+      <td>${formatDate(f.date)}</td>
+      <td>${parseFloat(f.montant||0).toLocaleString('fr-FR')} €</td>
+      <td>${badgeFacture(f.statut)}</td>
+      <td class="action-row">
+        <button class="btn-icon" title="Modifier" onclick="editFacture('${f.id}')">✏️</button>
+        <button class="btn-icon" title="Aperçu PDF" onclick="previewFacture('${f.id}')">👁️</button>
+        <button class="btn-icon" title="Marquer payée" onclick="markPaid('${f.id}')">✅</button>
+        <button class="btn-icon" title="Supprimer" onclick="deleteItem('factures','${f.id}')">🗑️</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:30px">Aucune facture</td></tr>';
+}
+
+function renderDevis() {
+  const tb = document.getElementById('table-devis');
+  tb.innerHTML = [...(DB.devis||[])].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(d=>`
+    <tr>
+      <td><strong>${d.numero}</strong></td>
+      <td>${d.client}</td>
+      <td>${d.projet}</td>
+      <td>${formatDate(d.date)}</td>
+      <td>${parseFloat(d.montant||0).toLocaleString('fr-FR')} €</td>
+      <td>${badgeDevis(d.statut)}</td>
+      <td class="action-row">
+        <button class="btn-icon" title="Convertir en facture" onclick="devisToFacture('${d.id}')">→🧾</button>
+        <button class="btn-icon" title="Supprimer" onclick="deleteItem('devis','${d.id}')">🗑️</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:30px">Aucun devis</td></tr>';
+}
+
+function renderClients() {
+  const g = document.getElementById('clients-grid');
+  const clients = DB.clients || [];
+  if (!clients.length) { g.innerHTML='<div style="color:var(--muted)">Aucun client enregistré</div>'; return; }
+  g.innerHTML = clients.map(c=>{
+    const cmds = (DB.commandes||[]).filter(x=>x.client===c.nom).length;
+    const total = (DB.factures||[]).filter(f=>f.client===c.nom).reduce((s,f)=>s+parseFloat(f.montant||0),0);
+    return `<div class="client-card">
+      <div class="client-av">${c.nom.substring(0,2).toUpperCase()}</div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:2px">${c.nom}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">${c.type||'—'}</div>
+      <div style="display:flex;gap:12px">
+        <div style="font-size:11px;color:var(--muted)"><span style="color:var(--text);font-weight:600">${cmds}</span> projets</div>
+        <div style="font-size:11px;color:var(--muted)"><span style="color:var(--text);font-weight:600">${total.toLocaleString('fr-FR')} €</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderDrive() {
+  const clients = DB.clients || [];
+  let html = `<div><span class="folder">📁</span> <span class="hl">APP AKINZ DESIGN</span></div>`;
+  html += `<div style="padding-left:20px"><span class="folder">📁</span> <span class="hl">CLIENTS</span></div>`;
+  clients.forEach(c=>{
+    const cmds = (DB.commandes||[]).filter(x=>x.client===c.nom);
+    html += `<div style="padding-left:40px"><span class="folder">📁</span> ${c.nom}</div>`;
+    cmds.forEach(cmd=>{
+      html += `<div style="padding-left:60px"><span class="folder" style="color:#C0392B">📁</span> ${cmd.projet}</div>`;
+      html += `<div style="padding-left:80px"><span class="folder">📁</span> Facture · Création · Export</div>`;
+    });
+  });
+  html += `<div style="padding-left:20px"><span class="folder">📁</span> <span class="hl">FACTURES</span></div>`;
+  html += `<div style="padding-left:20px"><span class="folder">📁</span> <span class="hl">DEVIS</span></div>`;
+  document.getElementById('drive-tree').innerHTML = html;
+}
+
+function updateBadges() {
+  const inProgress = (DB.commandes||[]).filter(c=>['En cours','En attente'].includes(c.statut)).length;
+  const unpaid = (DB.factures||[]).filter(f=>f.statut!=='Payée').length;
+  document.getElementById('badge-commandes').textContent = inProgress;
+  document.getElementById('badge-factures').textContent = unpaid;
+}
+
+function updateClientsList() {
+  const dl = document.getElementById('clients-list');
+  dl.innerHTML = (DB.clients||[]).map(c=>`<option value="${c.nom}">`).join('');
+}
+
+// ===== MODALS =====
+let currentModalType = 'commande';
+function openModal(type) {
+  currentModalType = type;
+  if (type==='commande') {
+    document.getElementById('modal-commande-title').textContent = 'Nouvelle commande';
+    document.getElementById('edit-id').value='';
+    document.getElementById('f-client').value='';
+    document.getElementById('f-projet').value='';
+    document.getElementById('f-brief').value='';
+    document.getElementById('f-montant').value='';
+    document.getElementById('f-statut').value='En attente';
+    document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+    document.getElementById('modal-commande').classList.add('open');
+  } else if (type==='devis') {
+    document.getElementById('modal-commande-title').textContent = 'Nouveau devis';
+    document.getElementById('modal-commande').classList.add('open');
+  } else if (type==='facture') {
+    document.getElementById('modal-facture-title').textContent = 'Nouvelle facture';
+    document.getElementById('ff-edit-id').value='';
+    document.getElementById('ff-client').value='';
+    document.getElementById('ff-projet').value='';
+    document.getElementById('ff-desc').value='';
+    document.getElementById('ff-montant').value='';
+    document.getElementById('ff-statut').value='En attente';
+    document.getElementById('ff-date').value=new Date().toISOString().split('T')[0];
+    const nextNum = '#FC'+String(lastInvoiceNum+1).padStart(4,'0');
+    document.getElementById('ff-num-display').textContent = nextNum;
+    document.getElementById('modal-facture').classList.add('open');
+  }
+}
+function closeModal(type) { document.getElementById('modal-'+type).classList.remove('open'); }
+
+function editCommande(id) {
+  const c = DB.commandes.find(x=>x.id===id); if(!c) return;
+  document.getElementById('modal-commande-title').textContent = 'Modifier la commande';
+  document.getElementById('edit-id').value = id;
+  document.getElementById('f-client').value = c.client;
+  document.getElementById('f-projet').value = c.projet;
+  document.getElementById('f-brief').value = c.brief||'';
+  document.getElementById('f-montant').value = c.montant||'';
+  document.getElementById('f-statut').value = c.statut;
+  document.getElementById('f-date').value = c.date;
+  document.getElementById('f-prestation').value = c.prestation||'Motion Design';
+  document.getElementById('modal-commande').classList.add('open');
+}
+
+function editFacture(id) {
+  const f = DB.factures.find(x=>x.id===id); if(!f) return;
+  document.getElementById('modal-facture-title').textContent = 'Modifier la facture';
+  document.getElementById('ff-edit-id').value = id;
+  document.getElementById('ff-client').value = f.client;
+  document.getElementById('ff-projet').value = f.projet;
+  document.getElementById('ff-desc').value = f.desc||'';
+  document.getElementById('ff-montant').value = f.montant;
+  document.getElementById('ff-statut').value = f.statut;
+  document.getElementById('ff-date').value = f.date;
+  document.getElementById('ff-num-display').textContent = f.numero;
+  document.getElementById('modal-facture').classList.add('open');
+}
+
+function factureFromCommande(id) {
+  const c = DB.commandes.find(x=>x.id===id); if(!c) return;
+  document.getElementById('modal-facture-title').textContent = 'Nouvelle facture';
+  document.getElementById('ff-edit-id').value='';
+  document.getElementById('ff-client').value = c.client;
+  document.getElementById('ff-projet').value = c.projet;
+  document.getElementById('ff-desc').value = c.brief||'';
+  document.getElementById('ff-montant').value = c.montant||'';
+  document.getElementById('ff-statut').value = 'En attente';
+  document.getElementById('ff-date').value = new Date().toISOString().split('T')[0];
+  const nextNum = '#FC'+String(lastInvoiceNum+1).padStart(4,'0');
+  document.getElementById('ff-num-display').textContent = nextNum;
+  document.getElementById('modal-facture').classList.add('open');
+}
+
+function devisToFacture(id) {
+  const d = DB.devis.find(x=>x.id===id); if(!d) return;
+  document.getElementById('ff-client').value = d.client;
+  document.getElementById('ff-projet').value = d.projet;
+  document.getElementById('ff-montant').value = d.montant;
+  const nextNum = '#FC'+String(lastInvoiceNum+1).padStart(4,'0');
+  document.getElementById('ff-num-display').textContent = nextNum;
+  openModal('facture');
+}
+
+// ===== SAVE =====
+async function saveCommande() {
+  const client = document.getElementById('f-client').value.trim();
+  const projet = document.getElementById('f-projet').value.trim();
+  if (!client||!projet) { showNotif('⚠️','Remplis le client et le projet'); return; }
+  const editId = document.getElementById('edit-id').value;
+  const item = {
+    id: editId || 'cmd_'+Date.now(),
+    client, projet,
+    brief: document.getElementById('f-brief').value,
+    prestation: document.getElementById('f-prestation').value,
+    montant: document.getElementById('f-montant').value,
+    statut: document.getElementById('f-statut').value,
+    date: document.getElementById('f-date').value,
+    type: document.getElementById('f-client-type').value
+  };
+  if (editId) {
+    const idx = DB.commandes.findIndex(x=>x.id===editId);
+    if (idx>=0) DB.commandes[idx]=item;
+  } else {
+    DB.commandes.push(item);
+    if (!DB.clients.find(c=>c.nom===client)) DB.clients.push({nom:client,type:item.type});
+    showNotif('📁','Création des dossiers Drive...');
+    await createProjectFolders(client, projet);
+  }
+  await saveDB();
+  closeModal('commande');
+  renderAll();
+  showNotif('✅', editId?'Commande modifiée !':'Commande créée + dossiers Drive créés !');
+}
+
+async function saveFacture() {
+  const client = document.getElementById('ff-client').value.trim();
+  const projet = document.getElementById('ff-projet').value.trim();
+  const montant = document.getElementById('ff-montant').value;
+  if (!client||!projet||!montant) { showNotif('⚠️','Remplis tous les champs obligatoires'); return; }
+  const editId = document.getElementById('ff-edit-id').value;
+  let numero;
+  if (editId) {
+    numero = DB.factures.find(x=>x.id===editId)?.numero;
+  } else {
+    lastInvoiceNum++;
+    numero = '#FC'+String(lastInvoiceNum).padStart(4,'0');
+    localStorage.setItem('akinz_last_inv', lastInvoiceNum);
+  }
+  const item = {
+    id: editId||'fac_'+Date.now(),
+    numero, client, projet,
+    desc: document.getElementById('ff-desc').value,
+    montant: parseFloat(montant),
+    statut: document.getElementById('ff-statut').value,
+    date: document.getElementById('ff-date').value,
+    echeance: document.getElementById('ff-echeance').value
+  };
+  if (editId) { const idx=DB.factures.findIndex(x=>x.id===editId); if(idx>=0) DB.factures[idx]=item; }
+  else DB.factures.push(item);
+  await saveDB();
+  closeModal('facture');
+  renderAll();
+  showNotif('✅', editId?'Facture modifiée !':'Facture '+numero+' créée !');
+  previewFacture(item.id);
+}
+
+function markPaid(id) {
+  const f = DB.factures.find(x=>x.id===id); if(!f) return;
+  f.statut='Payée';
+  saveDB(); renderAll();
+  showNotif('✅','Facture marquée comme payée !');
+}
+
+function deleteItem(col, id) {
+  if (!confirm('Supprimer cet élément ?')) return;
+  DB[col] = DB[col].filter(x=>x.id!==id);
+  saveDB(); renderAll();
+  showNotif('🗑️','Élément supprimé');
+}
+
+// ===== INVOICE PREVIEW =====
+let currentPreviewId = null;
+function previewFacture(id) {
+  const f = DB.factures.find(x=>x.id===id); if(!f) return;
+  currentPreviewId = id;
+  const html = `<div class="invoice-preview" id="inv-print">
+    <div class="inv-header">
+      <div>
+        <div class="inv-title">AKINZ DESIGN</div>
+        <div class="inv-num">${f.numero} · ${formatDate(f.date)}</div>
+        <div style="margin-top:8px;font-size:12px;color:#666">Auto-Entrepreneur · Graphiste & Motion Designer</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:15px;font-weight:600">${f.client}</div>
+        <div style="font-size:12px;color:#666">Client</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;font-size:12px">
+      <div><div style="font-weight:600;margin-bottom:4px">Émetteur</div><div style="color:#555">Akinz Design<br>Auto-Entrepreneur</div></div>
+      <div><div style="font-weight:600;margin-bottom:4px">Destinataire</div><div style="color:#555">${f.client}<br>${f.projet}</div></div>
+    </div>
+    <table class="inv-table">
+      <thead><tr><th>Description</th><th style="text-align:right">Montant</th></tr></thead>
+      <tbody>
+        <tr><td>${f.desc||f.projet}</td><td style="text-align:right">${parseFloat(f.montant).toLocaleString('fr-FR')} €</td></tr>
+      </tbody>
+    </table>
+    <div class="inv-total">
+      <div class="inv-total-line"><span style="color:#666">Sous-total HT</span><span>${parseFloat(f.montant).toLocaleString('fr-FR')} €</span></div>
+      <div class="inv-total-line"><span style="color:#666">TVA</span><span style="color:#888">Non applicable (AE)</span></div>
+      <div class="inv-total-line big"><span>TOTAL</span><span style="color:#C0392B">${parseFloat(f.montant).toLocaleString('fr-FR')} €</span></div>
+    </div>
+    ${f.echeance?`<div style="margin-top:16px;font-size:12px;color:#666">📅 Échéance de paiement : ${formatDate(f.echeance)}</div>`:''}
+    <div class="inv-footer">
+      Auto-Entrepreneur — TVA non applicable, art. 293B du CGI<br>
+      Merci pour votre confiance !
+    </div>
+  </div>`;
+  document.getElementById('invoice-preview-content').innerHTML = html;
+  document.getElementById('modal-preview').classList.add('open');
+}
+
+function downloadInvoicePDF() {
+  const el = document.getElementById('inv-print');
+  if (!el) return;
+  const w = window.open('','_blank');
+  w.document.write('<html><head><title>Facture</title><style>body{font-family:Arial,sans-serif;font-size:13px;padding:40px;color:#111}table{width:100%;border-collapse:collapse}th{background:#f5f5f5;padding:8px;text-align:left;font-size:12px}td{padding:8px;border-bottom:1px solid #eee}.big{font-weight:700;font-size:16px;border-top:2px solid #C0392B;padding-top:8px}</style></head><body>');
+  w.document.write(el.innerHTML);
+  w.document.write('</body></html>');
+  w.document.close();
+  w.print();
+}
+
+// ===== HELPERS =====
+function badgeHTML(s) {
+  const map = {'En cours':'b-progress','En attente':'b-pending','Livré':'b-done','Facturé':'b-quote','Payé':'b-paid'};
+  return `<span class="badge ${map[s]||'b-pending'}">${s}</span>`;
+}
+function badgeFacture(s) {
+  const map = {'Payée':'b-paid','En attente':'b-pending','En retard':'b-late'};
+  return `<span class="badge ${map[s]||'b-pending'}">${s}</span>`;
+}
+function badgeDevis(s) {
+  const map = {'Accepté':'b-accepted','En attente':'b-pending','Refusé':'b-refused'};
+  return `<span class="badge ${map[s]||'b-pending'}">${s}</span>`;
+}
+function formatDate(d) {
+  if (!d) return '—';
+  const parts = d.split('-');
+  return parts.length===3?`${parts[2]}/${parts[1]}/${parts[0]}`:d;
+}
+
+function nav(page, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard',commandes:'Commandes',factures:'Factures',devis:'Devis',clients:'Clients',drive:'Drive Google'};
+  document.getElementById('page-title').textContent = titles[page]||page;
+  if(page==='drive') renderDrive();
+}
+
+function showNotif(icon, text) {
+  const n = document.getElementById('notif');
+  document.getElementById('notif-icon').textContent = icon;
+  document.getElementById('notif-text').textContent = text;
+  n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'), 3500);
+}
+</script>
+
+
+</body></html>
